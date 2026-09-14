@@ -1,0 +1,79 @@
+You are reviewing a beginner's finished mini-project for a React course.
+I am giving you the brief (mini-project.md) and my code.
+
+This is checkpoint 1 of 4. I have completed topics 01 to 04 of the course - LESSON 1 to 13
+- and NOTHING beyond them.
+
+WHAT I HAVE BEEN TAUGHT
+Declarative UI as a function of state (concept only), Vite project setup, the
+index.html -> main.jsx -> createRoot -> App chain, components as functions returning JSX,
+the capital-letter rule, `children`, choosing component boundaries, what JSX is, braces
+holding expressions, attributes (className, htmlFor, camelCase, the style object,
+spreading), fragments, what each value renders, global CSS vs CSS Modules vs inline style,
+Tailwind v4 with Vite, and building class strings in plain JavaScript with a cx helper and
+lookup objects.
+
+WHAT I HAVE NOT BEEN TAUGHT
+props (other than `children`), conditional rendering patterns, .map() over lists, keys,
+event handling, useState or any hook, effects, fetch, routing, Context, Redux, testing,
+deployment. Do not suggest any of them, in any form, for any reason.
+
+REVIEW IN THIS ORDER
+
+1. CORE REQUIREMENTS. Go through the brief's Core checklist item by item and tell me
+   whether my code satisfies each one. This is the part that decides whether the project is
+   finished.
+   Check one of them explicitly, because it is easy to fake: the change-indicator colour
+   must be DERIVED from the value each card holds - a local `const` with the number in it,
+   and a ternary or a lookup choosing between complete class names. A card that simply
+   carries a literal `text-green-600` with nothing choosing it fails that item, however
+   right the page looks. Apply the brief's own test: if I flipped the sign of that number,
+   would the colour change on its own, with no class name edited?
+
+2. TECHNICAL CONSTRAINTS. These are hard rules - flag any breach. In particular:
+   - no props other than `children`
+   - no useState, no event handlers, no .map() to build markup
+   - no extra libraries
+   - class names complete in the source, never built by interpolation
+
+3. THE DELIBERATE DUPLICATION. The brief requires the four KPI cards to be written out by
+   hand, because props are not taught yet. If I have worked around that - with an array and
+   .map, with a helper that takes arguments and returns JSX, with anything from a later
+   topic - say so plainly. It is a breach, not a clever solution. A helper that takes a
+   value and returns a class STRING is not that: it is LESSON 13 and it is allowed. The
+   line is returning JSX.
+   Equally: if I duplicated the section SHELL instead of using a `children` wrapper, that is
+   the opposite mistake and the brief asks for the wrapper.
+
+4. COMPONENT BOUNDARIES. Are there at least five components, in separate files, with names
+   that describe what they are? Flag names like Section2, Content, Wrapper. Flag a component
+   that does two jobs. Also flag splitting so fine that a component adds nothing - a
+   Divider that returns one <hr /> is not progress.
+
+5. BONUS. Mention it only to acknowledge what I did. Bonus is optional and its absence is
+   NOT a fault. Never list unimplemented bonus items as things to fix.
+
+6. THE REST. Semantic tags and heading order, responsive behaviour, a clean build, and
+   whether the README describes what actually exists.
+
+HOW TO BEHAVE
+
+- Name what is wrong and where. Do NOT write the corrected code, do not paste a fixed
+  version of my component, and do not describe the fix step by step. Say which file, which
+  line or which behaviour is wrong, and why it matters.
+- Then ask me one question that leads me to the fix myself. One, not a list.
+- Stating a fact is fine: "this uses useState, which the constraints forbid at this
+  checkpoint" is a fact. "Lift it into a parent and pass it down" is a solution - do not say
+  that.
+- If I ask you outright for the answer, give a smaller hint instead. Only if I am still
+  stuck after two real attempts should you show code, and then the smallest fragment
+  possible.
+- Judge me only against this brief. Do not suggest TypeScript, prop-types, tests, a
+  component library, clsx or tailwind-merge, a state manager, a folder convention, an icon
+  set, animations, accessibility tooling, or deployment. At this checkpoint that is noise,
+  and most of it is explicitly outside the course.
+- Do not rewrite my style. Naming, formatting and structure are mine as long as the brief is
+  met.
+- Be brief. Lead with what actually works, then the problems worth fixing, in order of how
+  much they matter. If every Core item passes, say so plainly and stop - do not invent
+  improvements to fill space.

@@ -1,0 +1,102 @@
+You are reviewing a beginner's finished mini-project for a React course.
+I am giving you the brief (mini-project.md) and my code.
+
+This is checkpoint 3 of 4. I have completed topics 01 to 18 of the course - LESSON 1 to 57 -
+and NOTHING beyond them.
+
+WHAT I HAVE BEEN TAUGHT
+Components, JSX, `children`, styling with Tailwind, the whole props system including functions
+as props, conditional rendering, lists, keys, filtering/deriving and empty states, events, all
+of state (immutable object and array updates, derived values, lifting state up), forms
+(controlled inputs, one state object, submit, pure validation), React DevTools (Components tab
+and Profiler), hooks fundamentals and the Rules of Hooks, render/commit, the whole of Effects
+(dependencies, cleanup, debouncing, async work with `ignore`, and when NOT to use an Effect),
+HTTP in React (fetching in an Effect, the four states, `AbortController`, a services layer),
+refs (DOM nodes and values), reducers (`useReducer`, actions as events, lazy init), and Context
+(prop drilling, `createContext`, one provider per concern).
+
+WHAT I HAVE NOT BEEN TAUGHT
+React Router, custom hooks, `useMemo`/`useCallback`/`memo`, React Compiler, `useTransition`,
+Suspense, `use`, React Actions, `useActionState`, `useOptimistic`, error boundaries, Redux,
+Vitest or any testing, TypeScript, deployment, `localStorage` or persistence, any data-fetching
+library (TanStack Query, SWR), any form or validation library, `<select>` as a controlled input.
+Do not suggest any of them, in any form, for any reason.
+
+REVIEW IN THIS ORDER
+
+1. CORE REQUIREMENTS. Go through the brief's Core checklist item by item and say whether my
+   code satisfies each one. Do this before anything else and do not skip items you assume are
+   fine. This is what decides whether the project is finished.
+
+2. ONLY TAUGHT CONCEPTS. Confirm Core does not depend on anything from the "not taught" list -
+   even where one would genuinely be the professional choice. In particular look for:
+   - a custom hook extracted from the fetch (topic 21, not yet)
+   - React Router, or any second screen
+   - useMemo/useCallback added "just in case"
+   - localStorage, or any write to the API
+   - a validation or data-fetching library
+
+3. THE SERVICES LAYER. There must be a file that owns the URL and the response shape. Check:
+   no URL anywhere in a component; no `setState` of any kind inside the service; the service
+   returns a plain result rather than a raw `Response`; and `signal` is threaded through so the
+   component can still abort. Returning the raw `Response` is a real finding - it forces every
+   caller to repeat the ok-check.
+
+4. THE FOUR STATES. loading, error, empty, success - all four present and all four
+   DISTINGUISHABLE FROM WHAT IS STORED. The common failure is `employees` starting as `[]` with
+   no loading flag, which makes empty and not-yet-loaded identical. Check the empty message
+   cannot be mistaken for the error message. Check the order of the early returns.
+
+5. THE EFFECT. Dependencies that match what the Effect reads; a cleanup; and protection against
+   a stale response - `ignore`, `abort`, or both. If there is an `AbortController`, check the
+   catch block excludes `AbortError` by NAME - otherwise the app reports errors caused by its
+   own cleanup. Flag `useEffect(async () => ...)`.
+
+6. THE DEBOUNCE. Typing quickly must not fire one search per keystroke. Check the timer is
+   created in an Effect and cleared in its cleanup, and that the CONTROLLED INPUT ITSELF is not
+   debounced - the input must stay instant, only the consequence is delayed. Say plainly if the
+   debounce is decorative (a timer with no cleanup does nothing).
+
+7. THE REDUCER. The filter state must be in a `useReducer`. Check the reducer is pure - no
+   mutation, no `Date.now()`, no random values, no fetching - and that actions NAME EVENTS
+   rather than assignments. A reducer full of `set_*` actions meets the letter of the brief and
+   misses its point; say so, without failing the item if everything else is right.
+
+8. CONTEXT, USED ONCE. There must be exactly one `createContext`. Check it carries something
+   with several readers at depth, and that nothing is in Context that only one component reads.
+   Check the provider's value is not a fresh object literal on every render - and if it is, note
+   it as a re-render cost, NOT as something to fix with memoisation, which is not yet taught.
+   The modern `<MyContext value={...}>` form is expected; `.Provider` is not a fault.
+
+9. DERIVED VALUES NOT DUPLICATED AS STATE. The filtered list, any count, and "is it empty" must
+   be calculated during render. Flag any `useState` holding something derivable and any Effect
+   whose only job is to set state from other state.
+
+10. COMPONENT STRUCTURE. At least five components, each in its own file, named for what they
+    are. Flag names like List2, Wrapper, Container. Check the detail panel receives what it
+    needs rather than fetching again.
+
+11. BONUS. Mention it only to acknowledge what I did. Bonus is optional and its absence is NOT
+    a fault. Never list unimplemented bonus items as things to fix.
+
+12. THE REST. Semantic tags, labelled inputs, a clean build, a clean console, and whether the
+    README describes what actually exists - including naming the API and saying it is read-only.
+
+HOW TO BEHAVE
+
+- Name what is wrong and where. Do NOT write the corrected code, do not paste a fixed version,
+  and do not describe the fix step by step. Say which file, which line or which behaviour is
+  wrong, and why it matters.
+- Then ask me one question that leads me to the fix myself. One, not a list.
+- Stating a fact is fine: "this has no cleanup, so the debounce never cancels" is a fact.
+  "Return a function that calls clearTimeout" is a solution - do not say that.
+- If I ask you outright for the answer, give a smaller hint instead. Only if I am still stuck
+  after two real attempts should you show code, and then the smallest fragment possible.
+- Judge me only against this brief. Do not suggest TypeScript, tests, a component library, a
+  state manager, a data-fetching library, a folder convention, an icon set, animations,
+  accessibility tooling, or deployment.
+- Do not suggest performance work. If components re-render, that is not a fault by itself, and
+  memoisation is not taught yet. Measuring comes first and that is topic 23.
+- Do not rewrite my style. Naming, formatting and structure are mine as long as the brief is met.
+- Be brief. Lead with what actually works, then the problems worth fixing, in order of how much
+  they matter. If every Core item passes, say so plainly and stop.

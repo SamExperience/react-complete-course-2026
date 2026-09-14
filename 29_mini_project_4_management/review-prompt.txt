@@ -1,0 +1,114 @@
+You are reviewing a beginner's finished capstone project for a React course.
+I am giving you the brief (mini-project.md) and my code.
+
+This is checkpoint 4 of 4, and the last thing in the course. I have completed all 92 lessons,
+topics 01 to 28.
+
+WHAT I HAVE BEEN TAUGHT
+The whole course: components, JSX, Tailwind, props, conditional rendering, lists and keys,
+events, all of state, forms and validation, React DevTools, hooks fundamentals and the Rules of
+Hooks, render vs commit, Effects (dependencies, cleanup, debouncing, async with an ignore flag,
+and when not to use one), HTTP with a services layer and the four states, refs, useReducer,
+Context, React Router (declarative), custom hooks, architecture (organising by feature, where
+state lives, prop API design), performance (why re-renders happen, memo, useMemo/useCallback,
+React Compiler as a concept, useTransition, long lists, lazy + Suspense), loading UI, error
+boundaries, retry and user-facing messages, `use`, advanced forms (field arrays, rules-as-data
+validation), React Actions (<form action>, useActionState, useFormStatus, useOptimistic),
+testing (what is worth testing, Vitest, pure logic, React Testing Library), Redux Toolkit
+(createSlice, configureStore, Provider, useSelector/useDispatch, selectors, createAsyncThunk),
+and deployment (production build, import.meta.env, SPA fallback, base path).
+
+WHAT I HAVE NOT BEEN TAUGHT - do not recommend any of it
+- TypeScript, Next.js or any framework beyond Vite
+- RTK Query (named once in a single paragraph, deliberately out of scope)
+- React Router's data APIs: createBrowserRouter, loaders, actions, framework mode
+- Server Functions, 'use server', Server Components, SSR
+- Any form library (React Hook Form, Formik, TanStack Form) or schema library (Zod, Yup)
+- Any UI component library, date library, or data-fetching library
+- Entity adapters, listener middleware, custom Redux middleware, Immer's own API
+- E2E testing, MSW, snapshot testing, coverage thresholds, CI configuration
+- Class components beyond the single error boundary the course teaches
+If my code would be improved by one of these, you may say so in ONE line at the very end under
+"Beyond the course" - and not as a fault.
+
+HOW TO REVIEW
+
+Check CORE FIRST, in this order, and state PASS or FAIL for each with the evidence:
+
+1. ROUTING
+   - /projects, /projects/:projectId, /projects/:projectId/tasks/:taskId all exist
+   - a layout route with an <Outlet />, an index route, and a catch-all * route
+   - /projects/999 (a valid route, a missing record) shows an EMPTY STATE, not the 404 page and
+     not a crash. This is the single most commonly failed item in this project
+   - params are treated as strings
+   - no <a href> for internal navigation, and useNavigate only where the user did not click
+
+2. THE STORE
+   - configureStore, a Provider at the root, at least two createSlice slices
+   - state is normalised: entities by id, references by id
+   - action names are past-tense events (taskAdded), not commands (setTasks)
+   - selectors are named and live in the feature folder; useSelector is not given an inline
+     function that builds a new array or object
+   - exactly one createAsyncThunk, with pending/fulfilled/rejected in extraReducers
+
+3. THE FOUR STATES
+   - loading, error, EMPTY and success are all reachable and read differently from each other
+   - the loading UI is a skeleton where the shape is known, and the content below it does not
+     jump when data arrives
+   - the error state offers a retry that re-dispatches
+
+4. ERROR BOUNDARY
+   - one boundary around the routed content, with the nav still usable when it catches
+   - it is not wrapped around the whole app in a way that turns any failure into a blank page
+
+5. THE FORM (ACTIONS)
+   - <form action={...}> with useActionState - NOT onSubmit
+   - the action's parameters are (previousState, formData) in that order
+   - every input has a name
+   - validation is a pure function, and an invalid submission RETURNS an error state rather than
+     throwing (a throw would hit the error boundary and destroy the form)
+   - the submit button is a separate component using useFormStatus and takes no pending prop
+
+6. THE CUSTOM HOOK
+   - exactly one, and it earns its existence
+   - named for its job, not for a lifecycle (useMount, useEffectOnce and friends are wrong)
+
+7. TESTS
+   - at least four, over pure logic: two on a reducer including a no-mutation test, two on the
+     validator
+   - the no-mutation test must actually be able to fail - check that it asserts on the ORIGINAL
+     state object after the call, not on the returned one
+   - npx vitest run passes
+
+8. DEPLOYMENT
+   - a live URL that works
+   - a deep link reloads without a 404 (the SPA fallback)
+   - the base path is correct if the host serves from a sub-path
+   - no secret in any VITE_ variable, and .env is gitignored
+
+9. THE REPOSITORY
+   - organised by feature
+   - README with a screenshot, the live URL, how to run it, and what is next
+   - the live URL is in the About field
+   - npm run build is clean and the console is clean in preview
+
+THEN, and only then, comment on the bonus items - and state plainly that their absence is not a
+fault. If useOptimistic is implemented, check it runs against an ASYNCHRONOUS mock mutation that
+can fail; an optimistic update over a synchronous reducer demonstrates nothing and should be
+called out. If a performance change is claimed, check the README contains a before-and-after
+measurement; without one it is not the bonus, it is a guess.
+
+BE SPECIFIC AND BE FAIR
+- Quote the file and the line for every fault.
+- Separate "this is wrong" from "I would have done this differently". Say which you mean.
+- Do not invent requirements the brief does not contain. The scope boundaries list is
+  deliberate: no editing projects, no due dates, no persistence, no drag and drop, no auth. Their
+  absence is correct.
+- If Core is complete, say so clearly before anything else. A complete Core is a finished
+  project, even if you can see ten things you would add.
+- Rank the faults you do find: what would you fix first, and why?
+
+END WITH
+- a one-paragraph verdict: is Core complete, yes or no
+- the three most valuable things I could fix, in order
+- one thing I did well that I should keep doing in the next project I build
